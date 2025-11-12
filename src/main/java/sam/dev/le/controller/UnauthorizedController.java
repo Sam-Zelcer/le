@@ -3,8 +3,8 @@ package sam.dev.le.controller;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import sam.dev.le.repository.dtos.SignInRequest;
-import sam.dev.le.repository.dtos.SignUpRequest;
+import sam.dev.le.repository.dtos.auth.SignInRequest;
+import sam.dev.le.repository.dtos.auth.SignUpRequest;
 import sam.dev.le.service.user.AuthService;
 
 @RestController

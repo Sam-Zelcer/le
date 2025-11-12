@@ -5,9 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import sam.dev.le.repository.UserRepository;
-import sam.dev.le.repository.entitys.MyUserDetails;
-import sam.dev.le.repository.entitys.User;
+import sam.dev.le.repository.user.UserRepository;
+import sam.dev.le.repository.entitys.user.MyUserDetails;
+import sam.dev.le.repository.entitys.user.User;
 
 import java.util.Optional;
 
@@ -21,11 +21,17 @@ public class MyUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
+        Optional<User> optionalUser = userRepository.findById(id);
+        return optionalUser.map(MyUserDetails::new)
+                .orElseThrow(() -> new UsernameNotFoundException("User wasn't found"));
+    }
+
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optionalUser = userRepository.findUserByUsername(username);
-        return optionalUser.map(MyUserDetails::new)
-                .orElseThrow(() -> new UsernameNotFoundException("User with name:" + username + " not found"));
+        return null;
     }
 }
 

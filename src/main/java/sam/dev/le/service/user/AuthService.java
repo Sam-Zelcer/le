@@ -6,13 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import sam.dev.le.repository.UnverifiedUserRepository;
-import sam.dev.le.repository.UserRepository;
-import sam.dev.le.repository.UserRole;
-import sam.dev.le.repository.dtos.SignInRequest;
-import sam.dev.le.repository.dtos.SignUpRequest;
-import sam.dev.le.repository.entitys.UnverifiedUser;
-import sam.dev.le.repository.entitys.User;
+import sam.dev.le.repository.user.UnverifiedUserRepository;
+import sam.dev.le.repository.user.UserRepository;
+import sam.dev.le.repository.enums.UserRole;
+import sam.dev.le.repository.dtos.auth.SignInRequest;
+import sam.dev.le.repository.dtos.auth.SignUpRequest;
+import sam.dev.le.repository.entitys.user.UnverifiedUser;
+import sam.dev.le.repository.entitys.user.User;
 import sam.dev.le.service.jwt.JWTService;
 import sam.dev.le.service.mail.MailService;
 
@@ -110,7 +110,7 @@ public class AuthService {
 
             if (
                     passwordEncoder.matches(request.getPassword(), optionalUser.get().getPassword())
-            ) return jwtService.generateToken(optionalUser.get().getUsername());
+            ) return jwtService.generateToken(optionalUser.get().getId());
 
             return "bad credentials";
 

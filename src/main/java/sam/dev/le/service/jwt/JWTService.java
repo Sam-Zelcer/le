@@ -3,13 +3,12 @@ package sam.dev.le.service.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import sam.dev.le.repository.UserRepository;
-import sam.dev.le.repository.entitys.User;
+import sam.dev.le.repository.user.UserRepository;
+import sam.dev.le.repository.entitys.user.User;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -31,18 +30,19 @@ public class JWTService {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(String username) {
-        Optional<User> optionalUser = userRepository.findUserByUsername(username);
+    public String generateToken(Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) return Jwts
                 .builder()
-                .subject(username)
-                .claim("role", optionalUser.get().getRole())
+                .subject(optionalUser.get().getUsername())
+                .claim("userId", userId)
+                .claim("role", optionalUser.get().getRole().toString())
                 .issuedAt(new Date())
                 .expiration(new Date((new Date().getTime() + expiration)))
                 .signWith(getSecretKey())
                 .compact();
 
-        return "user with username : " + username + " wasn't found";
+        return "user wasn't found";
     }
 
     private Claims getAllClaims(String token) {
@@ -54,19 +54,20 @@ public class JWTService {
                 .getPayload();
     }
 
-    public String extractUsername(String token) {
-        return getAllClaims(token).getSubject();
+    public Long extractUsersId(String token) {
+        return getAllClaims(token).get("userId", Long.class);
     }
 
     public boolean verifyToken(
             String token,
             UserDetails userDetails
     ) {
-        final String username = extractUsername(token);
+        Optional<User> optionalUser = userRepository.findById(extractUsersId(token));
+        if (optionalUser.isEmpty()) return false;
         final Date expiration = getAllClaims(token).getExpiration();
         boolean isExpired = expiration.after(new Date());
 
-        return (username.equals(userDetails.getUsername()) && isExpired);
+        return (optionalUser.get().getUsername().equals(userDetails.getUsername()) && isExpired);
     }
 
 }

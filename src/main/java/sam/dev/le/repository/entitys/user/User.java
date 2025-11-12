@@ -1,10 +1,10 @@
-package sam.dev.le.repository.entitys;
+package sam.dev.le.repository.entitys.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import sam.dev.le.repository.UserRole;
+import sam.dev.le.repository.enums.UserRole;
 
 @Data
 @Entity

@@ -1,4 +1,4 @@
-package sam.dev.le.repository.entitys;
+package sam.dev.le.repository.entitys.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

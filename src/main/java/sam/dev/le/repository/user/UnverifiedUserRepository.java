@@ -1,8 +1,8 @@
-package sam.dev.le.repository;
+package sam.dev.le.repository.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import sam.dev.le.repository.entitys.UnverifiedUser;
+import sam.dev.le.repository.entitys.user.UnverifiedUser;
 
 import java.time.LocalDateTime;
 import java.util.Optional;

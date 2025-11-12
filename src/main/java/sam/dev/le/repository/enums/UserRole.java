@@ -1,4 +1,4 @@
-package sam.dev.le.repository;
+package sam.dev.le.repository.enums;
 
 public enum UserRole {
     USER,
