@@ -24,15 +24,11 @@ import sam.dev.le.service.user.MyUserDetailsService;
 public class SecurityConfiguration {
 
     private final JWTFilter jwtFilter;
+    private final MyUserDetailsService myUserDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public MyUserDetailsService userDetailsService() {
-        return new MyUserDetailsService();
     }
 
     @Bean
@@ -43,12 +39,10 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(
-            UserDetailsService userDetailsService,
-            PasswordEncoder passwordEncoder
-    ) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(myUserDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
@@ -59,7 +53,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/unauthorized/**").permitAll()
                         .requestMatchers("/chat/**").hasAnyAuthority("USER", "ADMIN")
-                        .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/ws/**").hasAnyAuthority("USER", "ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

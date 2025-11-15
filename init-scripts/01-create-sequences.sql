@@ -1,0 +1,23 @@
+ALTER SEQUENCE IF EXISTS user_table_id_seq
+    RESTART WITH 100000
+    MIN 100000
+    CACHE 50
+    INCREMENT BY 1;
+
+ALTER SEQUENCE IF EXISTS unverified_user_table_id_seq
+    RESTART WITH 1
+    MIN 1
+    CACHE 50
+    INCREMENT BY 1;
+
+ALTER SEQUENCE IF EXISTS message_table_id_seq
+    RESTART WITH 1
+    MIN 1
+    CACHE 100
+    INCREMENT BY 1;
+
+ALTER SEQUENCE IF EXISTS private_chat_table_id_seq
+    CACHE 50
+    MIN 1
+    INCREMENT BY 1
+    RESTART WITH 1;

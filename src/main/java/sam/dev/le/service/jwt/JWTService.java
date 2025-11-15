@@ -58,7 +58,11 @@ public class JWTService {
         return getAllClaims(token).get("userId", Long.class);
     }
 
-    public boolean verifyToken(
+    public String extractUsername(String token) {
+        return getAllClaims(token).getSubject();
+    }
+
+    public boolean validateToken(
             String token,
             UserDetails userDetails
     ) {
